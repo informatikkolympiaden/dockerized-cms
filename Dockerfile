@@ -5,12 +5,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y build-essential openjdk-8-jdk-headless fp-compiler \
     postgresql postgresql-client python3.6 cppreference-doc-en-html \
-    cgroup-lite libcap-dev zip
-
-RUN apt-get install -y wget python3-pip
-
-RUN apt-get install -y python3.6-dev libpq-dev libcups2-dev libyaml-dev \
-    libffi-dev python3-pip
+    cgroup-lite libcap-dev zip wget python3-pip python3.6-dev libpq-dev \
+    libcups2-dev libyaml-dev libffi-dev python3-pip python
 
 # Install cms
 RUN cd /root/ && \
