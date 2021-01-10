@@ -31,8 +31,7 @@ RUN /etc/init.d/postgresql start && \
 USER root
 
 # Configuring cms
-RUN cd /root/cms/ && \
-    cp config/cms.conf.sample config/cms.conf
+ADD cms.conf /usr/local/etc/cms.conf
 
 # Fix locale bug
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
@@ -42,5 +41,14 @@ RUN apt-get install -y locales && \
 RUN /etc/init.d/postgresql start && \
     cmsInitDB
 
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+ADD entrypoint.sh /root/
 
+VOLUME  ["/var/log/postgresql", "/var/lib/postgresql"]
+
+# Contest web service
+EXPOSE 8888
+
+# Admin web service
+EXPOSE 8889
+
+ENTRYPOINT /root/entrypoint.sh
