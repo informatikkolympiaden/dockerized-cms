@@ -9,10 +9,9 @@ function cleanup {
 trap cleanup EXIT
 
 docker build -t nio:cms .
-docker run -d --rm \
+docker run -d --privileged --rm \
     --mount source=$1-vol1,destination=/var/log/postgresql \
     --mount source=$1-vol2,destination=/var/lib/postgresql \
     -p $2:8888 -p $3:8889 --name $1 nio:cms
 
-docker exec -d $1 cmsAdminWebServer
-docker exec $1 cmsContestWebServer -c $4
+docker exec $1 cmsResourceService -a $4
