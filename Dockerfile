@@ -36,11 +36,21 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 RUN apt-get install -y locales && \
     locale-gen en_US.UTF-8
 
-RUN etc/init.d/postgresql start && \
+RUN /etc/init.d/postgresql start && \
     cmsInitDB
 
 ADD cms-nio-java /cms-nio-java
 RUN cd /cms-nio-java && \
+    python3 setup.py install
+
+RUN apt update && \
+    apt install -y software-properties-common && \
+    add-apt-repository ppa:pypy/ppa && \
+    apt update && \
+    apt install -y pypy3
+
+ADD cms-nio-pypy /cms-nio-pypy
+RUN cd /cms-nio-pypy && \
     python3 setup.py install
 
 ADD entrypoint.sh /root/
