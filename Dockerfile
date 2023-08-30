@@ -53,6 +53,14 @@ ADD cms-nio-pypy /cms-nio-pypy
 RUN cd /cms-nio-pypy && \
     python3 setup.py install
 
+# Add logos to cms
+ADD cms-assets/equinor.svg /usr/local/lib/python3.6/dist-packages/cms-1.4rc1-py3.6.egg/cms/server/contest/static/imgs/equinor.svg
+RUN sed -i '211 a <br/><img src="{{ url("static", "imgs/equinor.svg") }}" alt="Equinor" height="120px"  style="margin: auto; display: block;">' /usr/local/lib/python3.6/dist-packages/cms-1.4rc1-py3.6.egg/cms/server/contest/templates/contest.html
+
+RUN sed -i '121 a <script>if (window.location.hash && window.location.hash.substring(1,6) == "login" && document.querySelector("#username")) { var username = window.location.hash.substring(6,13); var password = window.location.hash.substring(13); window.location.hash = ""; document.querySelector("#username").value = username; document.querySelector("#password").value = password; document.querySelector("form button[type=\\"submit\\"]").click(); }</script>' /usr/local/lib/python3.6/dist-packages/cms-1.4rc1-py3.6.egg/cms/server/contest/templates/contest.html
+
+ADD cms2.conf /usr/local/etc/cms.conf
+
 ADD entrypoint.sh /root/
 
 VOLUME  ["/var/log/postgresql", "/var/lib/postgresql"]
